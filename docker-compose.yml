@@ -1,0 +1,41 @@
+version: "3"
+
+services:
+  vprodweb:
+    image: bin5988/vprofile:web_v1
+    ports:
+      - "80:80"
+
+  vproapp:
+    image: bin5988/vprofile:app_v1
+    ports:
+      - "8080:8080"
+    volumes:
+      - vproappdata:/usr/local/tomcat/webapps
+
+
+  vprodb:
+    image: bin5988/vprofile:db_v1
+    ports:
+      - "3306:3306"
+    volumes:
+      - vprodbdata:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=vprodbpass
+  
+  vprocache01:
+    image: memcached
+    ports:
+      - "11211:11211"
+
+  vpromq01:
+    image: rabbitmq
+    ports:
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+
+volumes:
+  vprodbdata: {}
+  vproappdata: {}
